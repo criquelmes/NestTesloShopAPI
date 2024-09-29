@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +20,17 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     try {
+      // if (!createProductDto.slug) {
+      //   createProductDto.slug = createProductDto.title
+      //     .toLowerCase()
+      //     .replaceAll(' ', '_')
+      //     .replaceAll("'", '');
+      // } else {
+      //   createProductDto.slug = createProductDto.slug
+      //     .toLowerCase()
+      //     .replaceAll(' ', '_')
+      //     .replaceAll("'", '');
+      // }
       const product = this.productRepository.create(createProductDto);
       await this.productRepository.save(product);
       return product;
@@ -44,6 +60,8 @@ export class ProductsService {
       throw new BadRequestException(error.detail);
     }
     this.logger.error(error);
-    throw new InternalServerErrorException('Unexpected error, check server logs');
+    throw new InternalServerErrorException(
+      'Unexpected error, check server logs',
+    );
   }
 }
