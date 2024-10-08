@@ -13,7 +13,6 @@ import { DataSource, Repository } from 'typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
 import { Product, ProductImage } from './entities';
-import { query } from 'express';
 
 @Injectable()
 export class ProductsService {
