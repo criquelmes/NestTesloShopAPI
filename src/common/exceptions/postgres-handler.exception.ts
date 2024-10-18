@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 @Injectable()
@@ -25,6 +26,10 @@ export class PostgresExceptionHandler {
       const message = `Violates foreign key constraint in table (${error.table})`;
       this.logger.error(message);
       throw new InternalServerErrorException(message);
+    }
+
+    if (error.response.statusCode === 401) {
+      throw new UnauthorizedException(error.message);
     }
 
     this.logger.error(error.message);
