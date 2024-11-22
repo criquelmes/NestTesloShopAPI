@@ -10,7 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser, RawHeaders } from './decorators';
+import { Auth, GetUser, RawHeaders } from './decorators';
 import { User } from './entities/user.entity';
 import { IncomingHttpHeaders } from 'http';
 import { UserRoleGuard } from './guards/user-role/user-role.guard';
@@ -33,7 +33,7 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard('jwt'))
-  testingPrivateRoute(
+  privateRoute(
     @Req() request: Express.Request,
     @GetUser() user: User,
     @GetUser('email') email: string,
@@ -55,7 +55,7 @@ export class AuthController {
   // @SetMetadata('roles', ['admin', 'superadmin'])
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @RoleProtected(ValidRoles.superadmin, ValidRoles.admin)
-  testingPrivateRoute2(@GetUser() user: User) {
+  privateRoute2(@GetUser() user: User) {
     return {
       ok: true,
       message: 'This is a private2 route',
@@ -64,10 +64,8 @@ export class AuthController {
   }
 
   @Get('private3')
-  // @SetMetadata('roles', ['admin', 'superadmin'])
-  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  @RoleProtected(ValidRoles.superadmin, ValidRoles.admin)
-  testingPrivateRoute3(@GetUser() user: User) {
+  @Auth(ValidRoles.superadmin)
+  privateRoute3(@GetUser() user: User) {
     return {
       ok: true,
       message: 'This is a private2 route',
