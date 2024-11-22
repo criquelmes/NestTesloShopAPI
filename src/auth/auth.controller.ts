@@ -62,4 +62,16 @@ export class AuthController {
       user,
     };
   }
+
+  @Get('private3')
+  // @SetMetadata('roles', ['admin', 'superadmin'])
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @RoleProtected(ValidRoles.superadmin, ValidRoles.admin)
+  testingPrivateRoute3(@GetUser() user: User) {
+    return {
+      ok: true,
+      message: 'This is a private2 route',
+      user,
+    };
+  }
 }
