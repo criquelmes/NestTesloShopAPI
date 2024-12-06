@@ -63,6 +63,13 @@ export class AuthService {
       this.postgresExceptionHandler.handlerDBExceptions(error);
     }
   }
+  async checkAuthStatus(user: User) {
+    return {
+      ...user,
+      token: this.getJwt({ id: user.id }),
+    };
+  }
+
   // private handleDBExceptions(error: any): never {
   //   if (error.code === '23505') {
   //     throw new BadRequestException(error.detail);
