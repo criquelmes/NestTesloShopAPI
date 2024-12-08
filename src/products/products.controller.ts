@@ -9,7 +9,7 @@ import {
   ParseUUIDPipe,
   Query,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -39,6 +39,12 @@ export class ProductsController {
   }
 
   @Get(':term')
+  @ApiProperty({
+    required: false,
+    type: String,
+    description: 'Term to search, UUID, title or slug',
+    default: 't-shirt',
+  })
   findOne(@Param('term') term: string) {
     return this.productsService.findOnePlain(term);
   }
