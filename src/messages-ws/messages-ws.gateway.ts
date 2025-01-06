@@ -24,5 +24,9 @@ export class MessagesWsGateway
   }
   handleDisconnect(client: Socket) {
     this.messagesWsService.removeClient(client.id);
+    this.wss.emit(
+      'clients-updated',
+      this.messagesWsService.getConnectedClients(),
+    );
   }
 }
